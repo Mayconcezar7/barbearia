@@ -8,9 +8,15 @@ import { Badge } from "./_components/ui/badge"
 import { Avatar, AvatarImage } from "./_components/ui/avatar"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/babershopItem"
+import Title from "./_components/title"
 
 export default async function Home() {
   const barershops = await db.barbershop.findMany({})
+  const popularBarershops = await db.barbershop.findMany({
+    orderBy: {
+      name: "desc",
+    },
+  })
 
   return (
     <>
@@ -27,6 +33,23 @@ export default async function Home() {
           </Button>
         </div>
 
+        <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrolbar]:hidden">
+          <Button variant="secondary" className="px-3 gap-2">
+            <Image alt="cabelo" src="/cabelo.svg" width={24} height={24}/>
+            Cabelo
+          </Button>
+
+          <Button variant="secondary"  className="px-3 gap-2">
+            <Image alt="barba" src="/barba.svg" width={24} height={24} />
+            Barba
+          </Button>
+
+          <Button variant="secondary" className="px-3 gap-2">
+            <Image alt="acabamento" src="/acabamento.svg" width={24} height={24} />
+            Acabamento
+          </Button>
+        </div>
+
         <div className="relative mt-6 h-[150px] w-full">
           <Image
             alt=""
@@ -37,7 +60,7 @@ export default async function Home() {
         </div>
 
         <div>
-          <h2 className="mb-3 mt-6 text-xs text-gray-400">AGENDAMENTOS</h2>
+          <Title title="AGENDAMENTOS" />
 
           <Card className="pl-3">
             <CardContent className="flex p-0">
@@ -65,15 +88,35 @@ export default async function Home() {
         </div>
 
         <div>
-          <h2 className="mb-3 mt-6 text-xs text-gray-400">RECOMENDADOS</h2>
+          <Title title="RECOMENDADOS" />
 
           <div className="flex gap-4 overflow-auto [&::-webkit-scrolbar]:hidden">
             {barershops.map((barbershop) => (
-              <BarbershopItem key={barbershop.id} barbershop={barbershop}/>
+              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <Title title="BARBEARIAS POPULARES" />
+
+          <div className="flex gap-4 overflow-auto [&::-webkit-scrolbar]:hidden">
+            {popularBarershops.map((barbershop) => (
+              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
             ))}
           </div>
         </div>
       </div>
+
+      <footer className="mt-10">
+        <Card>
+          <CardContent className="px-5 py-6">
+            <p className="text-center text-sm text-gray-500">
+              © 2026 Copyright FSW Barber
+            </p>
+          </CardContent>
+        </Card>
+      </footer>
     </>
   )
 }
