@@ -1,5 +1,6 @@
 "use client"
 
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { PhoneIcon } from "lucide-react";
 
@@ -11,6 +12,7 @@ const BarberPhone = ({ phone }: PhoneProps) => {
 
   const handleCopyPhone = () => {
     navigator.clipboard.writeText(phone)
+    toast.success("Numero copiado com sucesso!")
   }
 
   return (

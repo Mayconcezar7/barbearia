@@ -1,4 +1,4 @@
-import Footer from "@/app/_components/footer"
+
 import Title from "@/app/_components/title"
 import { Button } from "@/app/_components/ui/button"
 import { db } from "@/app/_lib/prisma"
@@ -6,7 +6,6 @@ import {
   ChevronLeftIcon,
   MapPin,
   MenuIcon,
-  PhoneIcon,
   StarIcon,
 } from "lucide-react"
 import Image from "next/image"
@@ -91,7 +90,7 @@ const Barbershop = async ({ params }: BarbershopProps) => {
       <div className="mt-3 border-t border-solid px-5 pb-6">
         <Title title="SOBRE NÓS" />
 
-        <p className="w-11/12 text-wrap text-sm text-gray-300">
+        <p className=" text-justify text-sm text-gray-300">
           {barbershop.description}
         </p>
       </div>
@@ -116,7 +115,6 @@ const Barbershop = async ({ params }: BarbershopProps) => {
         </div>
       </div>
 
-      <Footer />
     </div>
   )
 }

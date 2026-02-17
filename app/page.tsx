@@ -3,13 +3,12 @@ import { Button } from "../app/_components/ui/button"
 import Header from "./_components/header"
 import { Input } from "./_components/ui/input"
 import Image from "next/image"
-import { Card, CardContent } from "./_components/ui/card"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/babershopItem"
 import Title from "./_components/title"
 import { quickSearchOptions } from "./_components/_constants/searchQuick"
 import BookingItem from "./_components/booking-item"
-import Footer from "./_components/footer"
+
 
 export default async function Home() {
   const barershops = await db.barbershop.findMany({})
@@ -87,8 +86,6 @@ export default async function Home() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </>
   )
 }
