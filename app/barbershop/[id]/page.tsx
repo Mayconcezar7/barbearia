@@ -5,7 +5,6 @@ import { db } from "@/app/_lib/prisma"
 import {
   ChevronLeftIcon,
   MapPin,
-  MenuIcon,
   StarIcon,
 } from "lucide-react"
 import Image from "next/image"
@@ -14,6 +13,7 @@ import { notFound } from "next/navigation"
 import React from "react"
 import ServiceItem from "@/app/_components/service-item"
 import BarberPhone from "@/app/_components/barberPhone"
+import SidebarButton from "@/app/_components/sidebar-button"
 
 interface BarbershopProps {
   params: {
@@ -61,7 +61,7 @@ const Barbershop = async ({ params }: BarbershopProps) => {
         </Button>
 
         <Button size="icon" variant="secondary">
-            <MenuIcon />
+            <SidebarButton/>
         </Button>
       </div>
 
