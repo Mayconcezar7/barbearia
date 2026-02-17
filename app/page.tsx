@@ -4,11 +4,12 @@ import Header from "./_components/header"
 import { Input } from "./_components/ui/input"
 import Image from "next/image"
 import { Card, CardContent } from "./_components/ui/card"
-import { Badge } from "./_components/ui/badge"
-import { Avatar, AvatarImage } from "./_components/ui/avatar"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/babershopItem"
 import Title from "./_components/title"
+import { quickSearchOptions } from "./_components/_constants/searchQuick"
+import BookingItem from "./_components/booking-item"
+import Footer from "./_components/footer"
 
 export default async function Home() {
   const barershops = await db.barbershop.findMany({})
@@ -34,20 +35,21 @@ export default async function Home() {
         </div>
 
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrolbar]:hidden">
-          <Button variant="secondary" className="px-3 gap-2">
-            <Image alt="cabelo" src="/cabelo.svg" width={24} height={24}/>
-            Cabelo
-          </Button>
-
-          <Button variant="secondary"  className="px-3 gap-2">
-            <Image alt="barba" src="/barba.svg" width={24} height={24} />
-            Barba
-          </Button>
-
-          <Button variant="secondary" className="px-3 gap-2">
-            <Image alt="acabamento" src="/acabamento.svg" width={24} height={24} />
-            Acabamento
-          </Button>
+          {quickSearchOptions.map((option) => (
+            <Button
+              variant="secondary"
+              className="gap-2 px-4"
+              key={option.title}
+            >
+              <Image
+                alt={option.title}
+                src={option.imageUrl}
+                width={24}
+                height={24}
+              />
+              {option.title}
+            </Button>
+          ))}
         </div>
 
         <div className="relative mt-6 h-[150px] w-full">
@@ -62,29 +64,7 @@ export default async function Home() {
         <div>
           <Title title="AGENDAMENTOS" />
 
-          <Card className="pl-3">
-            <CardContent className="flex p-0">
-              <div className="flex w-full flex-col justify-between gap-3 py-5">
-                <Badge className="w-fit">Confirmado</Badge>
-                <p className="text-2xl font-bold"> Corte de Cabelo</p>
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage
-                      src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png"
-                      alt="perfil da barbearia"
-                    />
-                  </Avatar>
-                  <p className="text-sm">Vintage Barber</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-center justify-center border-l border-solid p-5">
-                <p className="text-sm">Fevereiro</p>
-                <p className="text-2xl">12</p>
-                <p className="text-sm">10:30</p>
-              </div>
-            </CardContent>
-          </Card>
+          <BookingItem />
         </div>
 
         <div>
@@ -108,15 +88,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <footer className="mt-10">
-        <Card>
-          <CardContent className="px-5 py-6">
-            <p className="text-center text-sm text-gray-500">
-              © 2026 Copyright FSW Barber
-            </p>
-          </CardContent>
-        </Card>
-      </footer>
+      <Footer />
     </>
   )
 }
