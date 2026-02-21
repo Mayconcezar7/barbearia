@@ -60,7 +60,7 @@ const Barbershop = async ({ params }: BarbershopProps) => {
           </Link>
         </Button>
 
-        <Button size="icon" variant="secondary" >
+        <Button size="icon" variant="secondary">
             <SidebarButton/>
         </Button>
       </div>
