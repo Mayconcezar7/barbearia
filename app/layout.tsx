@@ -1,39 +1,41 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-import { Toaster } from "./_components/ui/sonner";
-import Footer from "./_components/footer";
+import type { Metadata } from "next"
+import localFont from "next/font/local"
+import "./globals.css"
+import { Toaster } from "./_components/ui/sonner"
+import Footer from "./_components/footer"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
-});
+})
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
-});
+})
 
 export const metadata: Metadata = {
   title: "BarberShop",
   description: "Agende o seu horario com uma Barbearia",
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster/>
-        <Footer/>
+        <div className="flex flex-col  min-h-screen">
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </div>
+        <Toaster />
       </body>
     </html>
-  );
+  )
 }

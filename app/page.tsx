@@ -1,14 +1,13 @@
-import { Search } from "lucide-react"
 import { Button } from "../app/_components/ui/button"
 import Header from "./_components/header"
-import { Input } from "./_components/ui/input"
 import Image from "next/image"
 import { db } from "./_lib/prisma"
-import BarbershopItem from "./_components/babershopItem"
+import BarbershopItem from "./_components/barbershopItem"
 import Title from "./_components/title"
 import { quickSearchOptions } from "./_components/_constants/searchQuick"
 import BookingItem from "./_components/booking-item"
-
+import Search from "./_components/search"
+import Link from "next/link"
 
 export default async function Home() {
   const barershops = await db.barbershop.findMany({})
@@ -26,27 +25,27 @@ export default async function Home() {
         <h2 className="text-xl font-bold">Olá, Maycon</h2>
         <p className="font-normal">Quinta-feira , 12, Fevereiro</p>
 
-        <div className="mt-6 flex items-center gap-2">
-          <Input placeholder="Buscar" />
-          <Button size="icon">
-            <Search />
-          </Button>
+        <div className="mt-6">
+          <Search />
         </div>
 
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrolbar]:hidden">
           {quickSearchOptions.map((option) => (
             <Button
-              variant="secondary"
-              className="gap-2 px-4"
+              className="flex items-center justify-start text-sm font-normal"
+              variant="ghost"
               key={option.title}
+              asChild
             >
-              <Image
-                alt={option.title}
-                src={option.imageUrl}
-                width={24}
-                height={24}
-              />
-              {option.title}
+              <Link href={`/barbershop?service=${option.title}`}>
+                <Image
+                  alt={option.title}
+                  src={option.imageUrl}
+                  width={18}
+                  height={18}
+                />
+                {option.title}
+              </Link>
             </Button>
           ))}
         </div>

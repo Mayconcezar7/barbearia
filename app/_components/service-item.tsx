@@ -2,7 +2,7 @@ import Image from "next/image"
 import { Card, CardContent } from "./ui/card"
 import { Button } from "./ui/button"
 import Link from "next/link"
-import { BarbershopService } from "@prisma/client"
+import { BarbershopService } from "@/generated/prisma/client"
 
 
 interface ServiceItemProps {

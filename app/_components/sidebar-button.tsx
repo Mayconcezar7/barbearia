@@ -28,10 +28,10 @@ import {
 } from "./ui/dialog"
 import { DialogTitle } from "@radix-ui/react-dialog"
 
-import logoGoogle from "../../public/google.svg"
-import { authClient } from "../_lib/auth-client"
-import { useRouter } from "next/navigation";
+import logoGoogle from "@/public/google.svg"
 
+import { authClient } from "../_lib/auth-client"
+import { useRouter } from "next/navigation"
 
 const SidebarButton = () => {
   const { data: session } = authClient.useSession()
@@ -45,16 +45,13 @@ const SidebarButton = () => {
     })
   }
 
-
-
-  
   async function handlerLogoutandGoogle() {
     await authClient.signOut({
-      fetchOptions:{
-        onSuccess: ()=>{
-          router.push("/");
-        }
-      }
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/")
+        },
+      },
     })
   }
 
@@ -73,10 +70,7 @@ const SidebarButton = () => {
         {session ? (
           <div className="flex items-center justify-start gap-3 border-b border-solid py-5">
             <Avatar>
-              <AvatarImage
-                alt=""
-                src={`${session.user?.image}`}
-              />
+              <AvatarImage alt="" src={`${session.user?.image}`} />
             </Avatar>
 
             <div className="flex flex-col">
@@ -93,7 +87,7 @@ const SidebarButton = () => {
             <h2 className="text-base font-bold">Olá. Faça seu login!</h2>
 
             <Dialog>
-              <DialogTrigger asChild>
+              <DialogTrigger>
                 <Button size="sm">
                   <LogInIcon size={18} />
                 </Button>
@@ -127,14 +121,15 @@ const SidebarButton = () => {
         )}
 
         <div className="flex flex-col gap-2 border-b border-solid py-5">
-          <SheetClose>
+          <SheetClose asChild>
             <Button
               className="flex w-full items-center justify-start text-sm font-normal"
               variant="ghost"
+              asChild
             >
               <Link href="/" className="flex items-center gap-2">
                 <HomeIcon size={18} />
-                Ìnicio
+                Início
               </Link>
             </Button>
           </SheetClose>
@@ -150,19 +145,24 @@ const SidebarButton = () => {
 
         <div className="flex flex-col gap-2 border-b border-solid py-5">
           {quickSearchOptions.map((option) => (
-            <Button
-              className="flex items-center justify-start text-sm font-normal"
-              variant="ghost"
-              key={option.title}
-            >
-              <Image
-                alt={option.title}
-                src={option.imageUrl}
-                width={18}
-                height={18}
-              />
-              {option.title}
-            </Button>
+            <SheetClose asChild>
+              <Button
+                className="flex items-center justify-start text-sm font-normal"
+                variant="ghost"
+                key={option.title}
+                asChild
+              >
+                <Link href={`/barbershop?service=${option.title}`}>
+                  <Image
+                    alt={option.title}
+                    src={option.imageUrl}
+                    width={18}
+                    height={18}
+                  />
+                  {option.title}
+                </Link>
+              </Button>
+            </SheetClose>
           ))}
         </div>
 
