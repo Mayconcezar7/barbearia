@@ -1,12 +1,7 @@
-
 import Title from "@/app/_components/title"
 import { Button } from "@/app/_components/ui/button"
 import { db } from "@/app/_lib/prisma"
-import {
-  ChevronLeftIcon,
-  MapPin,
-  StarIcon,
-} from "lucide-react"
+import { ChevronLeftIcon, MapPin, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -23,24 +18,38 @@ interface BarbershopProps {
 
 
 
-
 const Barbershop = async ({ params }: BarbershopProps) => {
   const barbershop = await db.barbershop.findUnique({
     where: {
       id: params.id,
     },
-    include:{
-      services: true
-    }
+    include: {
+      services: true,
+    },
   })
-
-  
 
   if (!barbershop) {
     return notFound()
-    }
+  }
+
+  const servicesFormatted = barbershop.services.map((service) => ({
+    id: service.id,
+    name: service.name,
+    description: service.description,
+    imageUrl: service.imageUrl,
+    barbershopId: service.barbershopId,
+    price: service.price.toNumber()
+  }))
 
 
+  const barbershopFormatted = {
+  id: barbershop.id,
+  name: barbershop.name,
+  address: barbershop.address,
+  imageUrl: barbershop.imageUrl,
+  description: barbershop.description,
+  phones: barbershop.phones,
+}
 
   return (
     <div>
@@ -60,8 +69,8 @@ const Barbershop = async ({ params }: BarbershopProps) => {
           </Link>
         </Button>
 
-        <Button size="icon" variant="secondary">
-            <SidebarButton/>
+        <Button size="icon" variant="secondary" asChild>
+          <SidebarButton />
         </Button>
       </div>
 
@@ -90,7 +99,7 @@ const Barbershop = async ({ params }: BarbershopProps) => {
       <div className="mt-3 border-t border-solid px-5 pb-6">
         <Title title="SOBRE NÓS" />
 
-        <p className=" text-justify text-sm text-gray-300">
+        <p className="text-justify text-sm text-gray-300">
           {barbershop.description}
         </p>
       </div>
@@ -98,23 +107,20 @@ const Barbershop = async ({ params }: BarbershopProps) => {
       <div className="mt-3 border-t border-solid px-5 pb-6">
         <Title title="SERVIÇOS" />
 
-        {barbershop.services.map((service) => (
-          <ServiceItem service ={service} key={service.id} />
+        {servicesFormatted.map((service) => (
+          <ServiceItem service={service} babershop={barbershopFormatted} key={service.id} />
         ))}
       </div>
 
-      <div className="mt-3 border-t border-solid pb-6 px-5">
+      <div className="mt-3 border-t border-solid px-5 pb-6">
         <Title title="CONTATOS" />
 
         <div className="flex flex-col gap-3">
-
-          {barbershop.phones.map((phone) => (
-            <BarberPhone phone={phone}/>
+          {barbershop.phones.map((phone, index) => (
+            <BarberPhone phone={phone} key={index} />
           ))}
-
         </div>
       </div>
-
     </div>
   )
 }

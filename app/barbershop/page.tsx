@@ -12,6 +12,9 @@ interface BarberShopProps {
 }
 
 const BarberShopPage = async ({ searchParams }: BarberShopProps) => {
+
+  
+  
     
   const barbershops = await db.barbershop.findMany({
     where: {
@@ -19,7 +22,7 @@ const BarberShopPage = async ({ searchParams }: BarberShopProps) => {
 
         searchParams?.title ? {
           name: {
-            contains: searchParams?.service,
+            contains: searchParams?.title,
              mode: "insensitive"
           }
         }:{},
@@ -28,7 +31,8 @@ const BarberShopPage = async ({ searchParams }: BarberShopProps) => {
           services:{
             some: {
               name: {
-                contains: searchParams?.service
+                contains: searchParams?.service,
+                mode: "insensitive"
               }
             }
           }
@@ -37,6 +41,8 @@ const BarberShopPage = async ({ searchParams }: BarberShopProps) => {
     },
   })
 
+
+
   return (
     <div >
       <Header />
@@ -44,7 +50,7 @@ const BarberShopPage = async ({ searchParams }: BarberShopProps) => {
         <Search/>
       </div>
       <div className="pl-5">
-        <Title title={`Resultados para "${searchParams?.title || searchParams.service}".`} />
+        <Title title={`Resultados para "${searchParams?.title || searchParams?.service}".`} />
       </div>
 
    

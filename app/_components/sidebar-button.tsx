@@ -25,8 +25,10 @@ import {
   DialogContent,
   DialogDescription,
   DialogTrigger,
+  DialogTitle,
+  DialogHeader,
+  DialogClose,
 } from "./ui/dialog"
-import { DialogTitle } from "@radix-ui/react-dialog"
 
 import logoGoogle from "@/public/google.svg"
 
@@ -145,7 +147,7 @@ const SidebarButton = () => {
 
         <div className="flex flex-col gap-2 border-b border-solid py-5">
           {quickSearchOptions.map((option) => (
-            <SheetClose asChild>
+            <SheetClose asChild key={option.title}>
               <Button
                 className="flex items-center justify-start text-sm font-normal"
                 variant="ghost"
@@ -166,16 +168,47 @@ const SidebarButton = () => {
           ))}
         </div>
 
-        <div className="flex flex-col gap-2 py-5">
-          <Button
-            className="flex items-center justify-start text-sm font-normal"
-            variant="ghost"
-            onClick={handlerLogoutandGoogle}
-          >
-            <LogOut />
-            Sair da conta
-          </Button>
-        </div>
+        {session && (
+          <div className="flex flex-col gap-2 py-5">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  className="flex items-center justify-start text-sm font-normal"
+                  variant="ghost"
+                >
+                  <LogOut />
+                  Sair da conta
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="w-[80%]">
+                <DialogHeader>
+                  <DialogTitle>Sair</DialogTitle>
+                </DialogHeader>
+                <DialogDescription className="text-center">
+                  Deseja mesmo sair da plataforma?
+                </DialogDescription>
+                <div className="flex w-full items-center justify-center gap-3">
+                  <DialogClose asChild>
+                    <Button variant="secondary" className="w-[40%]">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+
+               
+                    <Button
+                      variant="destructive"
+                      onClick={handlerLogoutandGoogle}
+                      className="w-[40%]"
+                    >
+                      Sair
+                    </Button>
+                 
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   )

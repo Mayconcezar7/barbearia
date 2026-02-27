@@ -8,6 +8,9 @@ import { quickSearchOptions } from "./_components/_constants/searchQuick"
 import BookingItem from "./_components/booking-item"
 import Search from "./_components/search"
 import Link from "next/link"
+import UserWelcomeCard from "./_components/userWelcomeCard"
+
+
 
 export default async function Home() {
   const barershops = await db.barbershop.findMany({})
@@ -22,8 +25,9 @@ export default async function Home() {
       <Header />
 
       <div className="my-6 flex flex-col gap-1 p-5">
-        <h2 className="text-xl font-bold">Olá, Maycon</h2>
-        <p className="font-normal">Quinta-feira , 12, Fevereiro</p>
+   
+          
+       <UserWelcomeCard/>
 
         <div className="mt-6">
           <Search />

@@ -10,10 +10,11 @@ const Search = () => {
     const router = useRouter()
 
     const [search , setSearch] = useState("")
+    
 
-    function handlerSearch(e: React.FormEvent<HTMLFormElement>) {
+    function handlerSearch(e: React.FormEvent) {
         e.preventDefault()
-        router.push(`/barbershop?search=${search}`)
+        router.push(`/barbershop?title=${search}`)
     }
 
   return (
