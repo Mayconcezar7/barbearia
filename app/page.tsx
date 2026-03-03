@@ -9,25 +9,48 @@ import BookingItem from "./_components/booking-item"
 import Search from "./_components/search"
 import Link from "next/link"
 import UserWelcomeCard from "./_components/userWelcomeCard"
-
-
+import { auth } from "./_lib/auth"
+import { headers } from "next/headers"
+import { gte } from "better-auth"
 
 export default async function Home() {
-  const barershops = await db.barbershop.findMany({})
+  const session = await auth.api.getSession({
+    headers: headers(),
+  })
+
+  const barbershops = await db.barbershop.findMany({})
   const popularBarershops = await db.barbershop.findMany({
     orderBy: {
       name: "desc",
     },
   })
 
+  const confirmedBookings = await db.booking.findMany({
+        where: {
+          userId: session?.user.id,
+          date: {
+            gte: new Date()
+          }
+        },
+        orderBy: {
+          date: "asc",
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+      })
+  
+
   return (
     <>
       <Header />
 
       <div className="my-6 flex flex-col gap-1 p-5">
-   
-          
-       <UserWelcomeCard/>
+        <UserWelcomeCard />
 
         <div className="mt-6">
           <Search />
@@ -63,17 +86,22 @@ export default async function Home() {
           />
         </div>
 
-        <div>
-          <Title title="AGENDAMENTOS" />
-
-          <BookingItem />
-        </div>
+        {session?.user && (
+          <div>
+            <Title title="AGENDAMENTOS" />
+            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrolbar]:hidden">
+              {confirmedBookings.map((booking) => (
+                <BookingItem key={booking.id} booking={booking} />
+              ))}
+            </div>
+          </div>
+        )}
 
         <div>
           <Title title="RECOMENDADOS" />
 
           <div className="flex gap-4 overflow-auto [&::-webkit-scrolbar]:hidden">
-            {barershops.map((barbershop) => (
+            {barbershops.map((barbershop) => (
               <BarbershopItem key={barbershop.id} barbershop={barbershop} />
             ))}
           </div>

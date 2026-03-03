@@ -136,13 +136,18 @@ const SidebarButton = () => {
             </Button>
           </SheetClose>
 
-          <Button
-            className="flex items-center justify-start text-sm font-normal"
-            variant="ghost"
-          >
-            <Calendar1Icon size={18} />
-            Agendamentos
-          </Button>
+          {session && (
+            <Button
+              className="flex justify-start text-sm font-normal"
+              variant="ghost"
+              asChild
+            >
+              <Link href="/bookings">
+                <Calendar1Icon size={18} />
+                Agendamentos
+              </Link>
+            </Button>
+          )}
         </div>
 
         <div className="flex flex-col gap-2 border-b border-solid py-5">
@@ -195,15 +200,13 @@ const SidebarButton = () => {
                     </Button>
                   </DialogClose>
 
-               
-                    <Button
-                      variant="destructive"
-                      onClick={handlerLogoutandGoogle}
-                      className="w-[40%]"
-                    >
-                      Sair
-                    </Button>
-                 
+                  <Button
+                    variant="destructive"
+                    onClick={handlerLogoutandGoogle}
+                    className="w-[40%]"
+                  >
+                    Sair
+                  </Button>
                 </div>
               </DialogContent>
             </Dialog>
