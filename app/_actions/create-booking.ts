@@ -28,4 +28,7 @@ export const createBooking = async (params:CreateBookingParams)=>{
         }
     })
 
+    revalidatePath("/bookings")
+    revalidatePath("/")
+
 }

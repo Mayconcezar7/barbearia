@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { Avatar, AvatarImage } from "./ui/avatar"
@@ -8,7 +10,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -16,6 +17,18 @@ import {
 import Image from "next/image"
 import BarberPhone from "./barberPhone"
 import { Button } from "./ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog"
+import { deleteBooking } from "../_actions/delete-booking"
+import { toast } from "sonner"
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -32,9 +45,21 @@ interface BookingItemProps {
 const BookingItem = ({ booking }: BookingItemProps) => {
   const isConfirmed = isFuture(booking.date)
 
+  async function handlerCancelBooking() {
+    try{
+      await deleteBooking(booking.id)
+      toast.success("Reserva cancelada com sucesso!")
+      
+    }catch(error){
+      console.log(error);
+      toast.error("Erro ao cancelar reserva. Tente novamente.")
+        
+    }
+  }
+
   return (
     <Sheet>
-      <SheetTrigger className="w-full">
+      <SheetTrigger asChild>
         <Card className="min-w-[90%] pl-3">
           <CardContent className="flex p-0">
             <div className="flex w-full flex-col justify-between gap-3 py-5">
@@ -81,7 +106,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           </SheetTitle>
         </SheetHeader>
 
-        <div className="relative flex h-[180px] w-full items-end mt-6">
+        <div className="relative mt-6 flex h-[180px] w-full items-end">
           <Image
             src="/map.webp"
             alt={`Mapa da Barbearia ${booking.service.barbershop.name}`}
@@ -155,7 +180,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
         <div className="mb-[30%] flex flex-col gap-3">
           {booking.service.barbershop.phones.map((phone, index) => (
-            <BarberPhone phone={phone} key={index}/>
+            <BarberPhone phone={phone} key={index} />
           ))}
         </div>
 
@@ -167,9 +192,35 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               </Button>
             </SheetClose>
 
-            <Button variant="destructive" className="w-full">
-              Cancelar Reserva
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive" className="w-full">
+                  Cancelar Reserva
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="w-[85%] rounded-lg">
+                <DialogHeader>
+                  <DialogTitle>Cancelar Reserva</DialogTitle>
+                </DialogHeader>
+                <DialogDescription className="text-center">
+                  Tem certeza que deseja cancelar esse agendamento? Essa Ação é
+                  Irreversível!
+                </DialogDescription>
+                <DialogFooter className="flex flex-row gap-3">
+                  <DialogClose asChild>
+                    <Button variant="secondary" className="w-full">
+                      Voltar
+                    </Button>
+                  </DialogClose>
+
+                  <DialogClose asChild>
+                    <Button variant="destructive" className="w-full" onClick={handlerCancelBooking}>
+                      Confirmar
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         ) : (
           <div className="flex justify-between gap-3">

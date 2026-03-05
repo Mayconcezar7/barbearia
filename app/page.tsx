@@ -11,7 +11,7 @@ import Link from "next/link"
 import UserWelcomeCard from "./_components/userWelcomeCard"
 import { auth } from "./_lib/auth"
 import { headers } from "next/headers"
-import { gte } from "better-auth"
+
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -26,24 +26,23 @@ export default async function Home() {
   })
 
   const confirmedBookings = await db.booking.findMany({
-        where: {
-          userId: session?.user.id,
-          date: {
-            gte: new Date()
-          }
-        },
-        orderBy: {
-          date: "asc",
-        },
+    where: {
+      userId: session?.user.id,
+      date: {
+        gte: new Date(),
+      },
+    },
+    orderBy: {
+      date: "asc",
+    },
+    include: {
+      service: {
         include: {
-          service: {
-            include: {
-              barbershop: true,
-            },
-          },
+          barbershop: true,
         },
-      })
-  
+      },
+    },
+  })
 
   return (
     <>
@@ -59,12 +58,12 @@ export default async function Home() {
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrolbar]:hidden">
           {quickSearchOptions.map((option) => (
             <Button
-              className="flex items-center justify-start text-sm font-normal"
-              variant="ghost"
+              className="flex items-center text-sm font-normal "
+              variant="secondary"
               key={option.title}
               asChild
             >
-              <Link href={`/barbershop?service=${option.title}`}>
+              <Link href={`/barbershop?service=${option.title}`} >
                 <Image
                   alt={option.title}
                   src={option.imageUrl}
@@ -88,8 +87,8 @@ export default async function Home() {
 
         {session?.user && (
           <div>
-            <Title title="AGENDAMENTOS" />
-            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrolbar]:hidden">
+            {confirmedBookings.length > 0 && <Title title="AGENDAMENTOS" />}
+            <div className="flex  gap-4 overflow-x-auto [&::-webkit-scrolbar]:hidden">
               {confirmedBookings.map((booking) => (
                 <BookingItem key={booking.id} booking={booking} />
               ))}

@@ -34,6 +34,7 @@ import logoGoogle from "@/public/google.svg"
 
 import { authClient } from "../_lib/auth-client"
 import { useRouter } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
 const SidebarButton = () => {
   const { data: session } = authClient.useSession()
@@ -45,6 +46,8 @@ const SidebarButton = () => {
       provider: "google",
       callbackURL: "/",
     })
+ 
+    
   }
 
   async function handlerLogoutandGoogle() {
@@ -52,9 +55,11 @@ const SidebarButton = () => {
       fetchOptions: {
         onSuccess: () => {
           router.push("/")
+          router.refresh()
         },
       },
     })
+    
   }
 
   return (
@@ -186,7 +191,7 @@ const SidebarButton = () => {
                 </Button>
               </DialogTrigger>
 
-              <DialogContent className="w-[80%]">
+              <DialogContent className="w-[80%] rounded-lg">
                 <DialogHeader>
                   <DialogTitle>Sair</DialogTitle>
                 </DialogHeader>
@@ -195,7 +200,7 @@ const SidebarButton = () => {
                 </DialogDescription>
                 <div className="flex w-full items-center justify-center gap-3">
                   <DialogClose asChild>
-                    <Button variant="secondary" className="w-[40%]">
+                    <Button variant="secondary" className="w-full">
                       Cancelar
                     </Button>
                   </DialogClose>
@@ -203,7 +208,7 @@ const SidebarButton = () => {
                   <Button
                     variant="destructive"
                     onClick={handlerLogoutandGoogle}
-                    className="w-[40%]"
+                    className="w-full"
                   >
                     Sair
                   </Button>
